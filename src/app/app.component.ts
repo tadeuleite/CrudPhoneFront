@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PhoneModel } from './app.model';
 import { AppService } from './app.service';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,6 +13,8 @@ export class AppComponent implements OnInit {
   displayFieldNewPhone: boolean = false;
   formSelect: FormGroup;
   formInsert: FormGroup;
+  formUpdate: FormGroup;
+  isUpdate: boolean;
 
   constructor(
     private appService: AppService,
@@ -36,29 +37,40 @@ export class AppComponent implements OnInit {
     });
   }
 
+  toFormGroup() {
+    const group: any = {};
+
+    this.phoneList.forEach(phone => {
+      group[phone.phoneNumber] = new FormControl('');
+    });
+    return new FormGroup(group);
+  }
+
   insertPhoneNumber() {
     const param = {
       BusinessEntityID: this.formInsert.get('nameId').value,
       PhoneNumber: this.formInsert.get('phoneNumber').value,
       PhoneNumberTypeID: this.formInsert.get('typeId').value
     };
-    
+
     this.appService.insertPersonPhone(param).subscribe(data => {
       this.phoneList = data;
+
       this.selectAllPhone();
     });
   }
 
   updatePhoneNumber(phone) {
-    console.log(phone)
-    this.appService.updatePersonPhone(phone).subscribe(data => {
+    this.isUpdate = false;
+    const newPhone = this.formUpdate.getRawValue()[phone.phoneNumber];
+    this.appService.updatePersonPhone(phone, newPhone).subscribe(data => {
       this.phoneList = data.data.success;
       this.selectAllPhone();
+      phone.isEditing = false;
     });
   }
 
   deletePhoneNumber(phone) {
-    console.log(phone)
     this.appService.deletePersonPhone(phone).subscribe(data => {
       this.phoneList = data.data.success;
       this.selectAllPhone();
@@ -79,6 +91,7 @@ export class AppComponent implements OnInit {
   selectAllPhone() {
     this.appService.selectAllPersonPhone().subscribe(data => {
       this.phoneList = data.data.personObjects;
+      this.formUpdate = this.toFormGroup();
     })
   }
 }

@@ -16,8 +16,8 @@ export class AppService {
         return this.http.post(environment.baseUrl + 'PersonPhone/InsertPersonPhone', model);
     }
 
-    updatePersonPhone(model?: any): Observable<any> {
-        return this.http.put(environment.baseUrl + 'PersonPhone/UpdatePersonPhone', model, { params: {newPhoneNumber: '123'} });
+    updatePersonPhone(model: any, newPhoneNumber: any): Observable<any> {
+        return this.http.put(environment.baseUrl + 'PersonPhone/UpdatePersonPhone', model, { params: {newPhoneNumber: newPhoneNumber} });
     }
 
     deletePersonPhone(model?: any): Observable<any> {

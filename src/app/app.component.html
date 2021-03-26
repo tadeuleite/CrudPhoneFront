@@ -23,6 +23,7 @@
           </div>
         </div>
       </div>
+
       <table class="table table-striped table-hover">
         <thead>
           <tr>
@@ -30,20 +31,29 @@
             <th>Name</th>
             <th>Phone Number</th>
             <th>Phone Type</th>
+            <th></th>
             <th>Edit/Delete</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let phone of phoneList;">
             <td></td>
-            <td>{{ phone.personName }}</td>
-            <td>{{ phone.phoneNumber }}</td>
-            <td>{{ phone.phoneType }}</td>
+            <td>{{ phone?.personName }}</td>
+            <td>{{ phone?.phoneNumber }}</td>
+            <td>{{ phone?.phoneType }}</td>
             <td>
-              <a (click)="updatePhoneNumber(phone)" class="edit" data-toggle="modal"><i
-                  class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-              <a (click)="deletePhoneNumber(phone)" class="delete" data-toggle="modal"><i
-                  class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+              <form [formGroup]="formUpdate">
+                <input *ngIf="phone.isEditing" [formControlName]="phone.phoneNumber" [id]="phone.phoneNumber"
+                  type="text" class="form-control" required>
+              </form>
+            </td>
+            <td>
+              <a *ngIf="!phone.isEditing" (click)="phone.isEditing = !phone.isEditing" class="edit" data-toggle="modal"><i class="material-icons"
+                  data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+              <a *ngIf="phone.isEditing" (click)="updatePhoneNumber(phone)" class="edit" data-toggle="modal"><i
+                  class="material-icons" data-toggle="tooltip" title="Edit">&#xea39;</i></a>
+              <a (click)="deletePhoneNumber(phone)" class="delete" data-toggle="modal"><i class="material-icons"
+                  data-toggle="tooltip" title="Delete">&#xE872;</i></a>
             </td>
           </tr>
         </tbody>
@@ -82,7 +92,7 @@
           <input formControlName="phoneNumber" type="text" class="form-control" required>
           <label>Enter your id</label>
           <input formControlName="nameId" type="text" class="form-control" required>
-          <label>Enter the type of the phone number</label>
+          <label>Enter the type of the phone number (1 for cellphone and 2 for local phone)</label>
           <input formControlName="typeId" type="text" class="form-control" required>
 
           <button (click)="insertPhoneNumber()" type="button" class="close">Save</button>
