@@ -13,22 +13,22 @@ export class AppService {
     ) { }
 
     insertPersonPhone(model?: any): Observable<any> {
-        return this.http.post(environment.baseUrl + 'InsertPersonPhone', model);
+        return this.http.post(environment.baseUrl + 'PersonPhone/InsertPersonPhone', model);
     }
 
     updatePersonPhone(model?: any): Observable<any> {
-        return this.http.put(environment.baseUrl + 'UpdatePersonPhone', model);
+        return this.http.put(environment.baseUrl + 'PersonPhone/UpdatePersonPhone', model, { params: {newPhoneNumber: '123'} });
     }
 
     deletePersonPhone(model?: any): Observable<any> {
-        return this.http.delete(environment.baseUrl + 'DeletePersonPhone', model);
+        return this.http.delete(environment.baseUrl + 'PersonPhone/DeletePersonPhone', { params: model });
     }
 
     selectPersonPhone(model?: any): Observable<any> {
-        return this.http.get(environment.baseUrl + 'SelectPersonPhone', model);
+        return this.http.get(environment.baseUrl + 'PersonPhone/SelectPersonPhone', { params: model });
     }
 
     selectAllPersonPhone(model?: any): Observable<any> {
-        return this.http.get(environment.baseUrl + 'SelectAllPersonPhone', model);
+        return this.http.get(environment.baseUrl + 'PersonPhone/SelectAllPersonPhone', { params: model });
     }
 }
